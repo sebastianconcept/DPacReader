@@ -1,0 +1,14 @@
+{
+	"category" : "DPacReader",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		 ],
+	"name" : "DPacReader",
+	"pools" : [
+		 ],
+	"super" : "ChangeList",
+	"type" : "normal" }
