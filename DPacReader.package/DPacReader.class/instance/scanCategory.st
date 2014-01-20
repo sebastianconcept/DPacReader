@@ -2,11 +2,13 @@ scanning
 scanCategory
 	"Scan anything that involves more than one chunk; method name is historical only"
 
-	| itemPosition item tokens stamp anIndex |
+	| itemPosition item tokens stamp |
 	itemPosition := file position.
 	item := file nextChunk.
 	((item includesSubstring: 'commentStamp:')
-		or: [ (item includesSubstring: 'methodsFor') or: [ item endsWith: 'reorganize' ] ])
+		or: [ 
+			(item includesSubstring: 'methodsFor')
+				or: [ (item includesSubstring: 'categoriesFor:') or: [ item endsWith: 'reorganize' ] ] ])
 		ifFalse: [ 
 			"Maybe a preamble, but not one we recognize; bail out with the preamble trick"
 			^ self
@@ -14,26 +16,9 @@ scanCategory
 				text: ('preamble: ' , item contractTo: 50) ].
 	tokens := item parseLiterals.
 	(tokens size >= 2 and: [ tokens last = 'methodsFor' ])
-		ifTrue: [ ^ self scanMethodForClass: tokens first meta: (tokens second = 'class') ].
-	tokens size >= 3
-		ifTrue: [ 
-			stamp := ''.
-			anIndex := tokens indexOf: #stamp: ifAbsent: [ nil ].
-			anIndex ifNotNil: [ stamp := tokens at: anIndex + 1 ].
-			tokens second == #methodsFor:
-				ifTrue: [ 
-					^ self
-						scanCategory: tokens third
-						class: tokens first
-						meta: false
-						stamp: stamp ].
-			tokens third == #methodsFor:
-				ifTrue: [ 
-					^ self
-						scanCategory: tokens fourth
-						class: tokens first
-						meta: true
-						stamp: stamp ] ].
+		ifTrue: [ ^ self scanMethodForClass: tokens first meta: tokens second = 'class' ].
+	(tokens size >= 3 and: [ tokens second = 'categoriesFor:' or: [ tokens third = 'categoriesFor:' ] ])
+		ifTrue: [ ^ self scanCategoryForClass: tokens first meta: tokens second = 'class' selector: tokens last ].
 	tokens second == #commentStamp:
 		ifTrue: [ 
 			stamp := tokens third.

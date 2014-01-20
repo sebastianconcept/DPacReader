@@ -2,5 +2,7 @@
 	"class" : {
 		 },
 	"instance" : {
-		"scanCategory" : "ThierryGoubier 1/17/2014 17:15",
+		"scanCategory" : "ThierryGoubier 1/20/2014 11:07",
+		"scanCategoryForClass:meta:selector:" : "ThierryGoubier 1/20/2014 11:06",
+		"scanFile:from:to:" : "ThierryGoubier 1/20/2014 09:25",
 		"scanMethodForClass:meta:" : "ThierryGoubier 1/17/2014 17:12" } }
